@@ -1,8 +1,11 @@
 <template>
   <b-form @submit.prevent="login">
-    <b-alert variant="danger" :show="error !== null" dismissible @dismissed="error = null">
-      {{ error }}
-    </b-alert>
+    <b-alert
+      variant="danger"
+      :show="error !== null"
+      dismissible
+      @dismissed="error = null"
+    >{{ error }}</b-alert>
     <p>Login with your UserName and Password.</p>
     <b-form-group label="UserName">
       <b-form-input v-model.trim="username" />
@@ -46,20 +49,24 @@ export default {
           this.error = null,
           this.username = "",
           this.password = ""
-
+        })
+        .catch(error => {
+          this.error = error.data;});
+        
+    },
+    close() {
+      this.$emit("close");
+    },
+    getMessages() {
+      
+        {
           this.$store
             .dispatch("getMessages")
             .then(response => {
               this.$store.state.messages = response.data;
             });
-          })
-        .catch(error => {
-          this.error = error.data;
-        });
-    },
-    close() {
-      this.$emit("close");
+      }
     }
   }
-};
+}
 </script>
