@@ -23,19 +23,20 @@
 <script>
 export default {
   name: "LoginForm",
-  props: {
-  },
+  props: {},
   data() {
     return {
       username: "",
       password: "",
-      error: null
+      error: null,
+      isLoginSuccessful: false
     };
   },
   computed: {
     loading() {
       return this.$store.state.loading;
-    }
+    },
+
   },
   methods: {
     login() {
@@ -43,30 +44,30 @@ export default {
         username: this.username,
         password: this.password
       };
+      let isLoginSuccessful = false;
       this.$store
         .dispatch("login", payload)
-        .then(response => {
-          this.error = null,
-          this.username = "",
-          this.password = ""
+        .then(() => {
+          this.error = null;
+          this.username = "";
+          this.password = "";
+          this.isLoginSuccessful = true;
         })
         .catch(error => {
-          this.error = error.data;});
-        
+          this.error = error.data;
+        });
+      this.getMessages();
     },
     close() {
       this.$emit("close");
     },
     getMessages() {
-      
-        {
-          this.$store
-            .dispatch("getMessages")
-            .then(response => {
-              this.$store.state.messages = response.data;
-            });
+      if (this.isLoginSuccessful) {
+        console.log("in");
+        this.$store.dispatch("getMessages");
       }
+      
     }
   }
-}
+};
 </script>

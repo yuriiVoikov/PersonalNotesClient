@@ -14,7 +14,7 @@ export const login = ({ commit }, payload) => {
           }`;
           commit("loginSuccess", auth);
           commit("hideAuthModal");
-          resolve(response);
+          resolve();
         })
         .catch(error => {
           commit("loginError");
@@ -61,17 +61,18 @@ export const login = ({ commit }, payload) => {
     });
   };
 
-  export const getMessages = ({ commit }) => {
+  export const getMessages = ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
-      commit("sendMessageRequest");
+      commit("getMessageRequest");
       axios
-        .get(`${BASE_ADRESS}/api/message`)
+        .get(`${BASE_ADRESS}/api/message`, {"Authorization" : `Bearer ${payload.token}`})
         .then(response => {
-          commit("sendMessageSuccess");
+          const messages = response.data;
+          commit("getMessageSuccess", messages);
           resolve(response);
         })
         .catch(error => {
-          commit("sendMessageError");
+          commit("getMessageError");
           reject(error.response);
         });
     });

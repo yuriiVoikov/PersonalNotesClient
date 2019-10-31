@@ -37,6 +37,7 @@ export const registerError = state => {
 
 export const logout = state => {
   state.auth = null;
+  state.messages = null;
 };
 
 export const sendMessageRequest = state => {
@@ -49,4 +50,17 @@ export const sendMessageSuccess = state => {
 
 export const sendMessageError = state => {
     state.loading = false;
+};
+
+export const getMessageRequest = state => {
+  state.loading = true;
+};
+
+export const getMessageSuccess = (state, payload) => {
+  state.loading = false;
+  state.messages = payload;
+};
+
+export const getMessageError = state => {
+  state.loading = false;
 };

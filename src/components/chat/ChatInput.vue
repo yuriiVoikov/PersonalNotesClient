@@ -1,5 +1,5 @@
 <template>
-    <div id="chat-input-group">
+    <div id="chat-input-group" v-if="isAuthenticated">
         <b-container>
             <b-row>
                 <b-col>
@@ -25,6 +25,7 @@
                 </b-col>
                 <b-col class="centered-position" cols="2">
                     <b-button size="lg" variant="outline-primary" @click="submit">Save</b-button>
+                    <b-button size="lg" variant="outline-primary" @click="load">Load</b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -44,7 +45,10 @@ export default {
     computed: {
         isAnyData() {
             return !this.file || !this.text;
-        }
+        },
+        isAuthenticated() {
+            return this.$store.getters.isAuthenticated;
+        },
     },
     methods: {
         handleFileUpload(event){
@@ -70,6 +74,12 @@ export default {
                     this.errors = error.data;
                 }
             });
+        },
+        load() {
+            const payload = {
+                token: this.$store.state.auth.accessToken
+            };
+            this.$store.dispatch("getMessages", payload);
         }
   }
 }
